@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio Virtual del Pensamiento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary: #4f46e5;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.07), 0 8px 10px -6px rgba(0,0,0,0.04);
+      --shadow-hover: 0 20px 30px -10px rgba(0,0,0,0.12), 0 10px 10px -5px rgba(0,0,0,0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(244, 63, 94, 0.05) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 3rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    header {
+      text-align: center;
+      margin-bottom: 2.8rem;
+    }
+
+    .badge-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      color: #4338ca;
+      padding: 0.45rem 1.1rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 2px 5px rgba(79, 70, 229, 0.08);
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: #0f172a;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.02em;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* CONTROLS */
+    .controls-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      align-items: center;
+      margin-bottom: 3rem;
+    }
+
+    .search-box {
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.95rem 1.2rem 0.95rem 3rem;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1.1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      color: #94a3b8;
+    }
+
+    .filter-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      background: #ffffff;
+      border: 1.5px solid var(--card-border);
+      color: #475569;
+      padding: 0.5rem 1.1rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: #cbd5e1;
+      color: #0f172a;
+      transform: translateY(-1px);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    /* GRID & CARDS */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.6rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--card-color);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.3rem;
+    }
+
+    .card-illustration {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: var(--card-bg-light);
+      border: 1px solid var(--card-border-light);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+      transition: transform 0.3s ease;
+    }
+
+    .card-illustration svg {
+      width: 32px;
+      height: 32px;
+      overflow: visible;
+    }
+
+    .card-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.3rem 0.65rem;
+      border-radius: 8px;
+      background: var(--card-bg-light);
+      color: var(--card-color);
+      border: 1px solid var(--card-border-light);
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.65rem;
+      color: #0f172a;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 1.6rem;
+      flex-grow: 1;
+    }
+
+    .card-action {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--card-color);
+      padding-top: 1rem;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .card-action svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.25s ease;
+    }
+
+    .card:hover .card-action svg {
+      transform: translateX(5px);
+    }
+
+    /* ===================================================
+       MICROANIMACIONES CSS PARA CADA ICONO SVG AL HOVER
+       =================================================== */
+
+    /* 1. Nodos de conexiones: pulsación y escala */
+    .card:hover .icon-node {
+      animation: pulseNode 0.9s ease-in-out infinite alternate;
+      transform-origin: center;
+    }
+    .card:hover .icon-node:nth-child(2) { animation-delay: 0.2s; }
+    .card:hover .icon-node:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulseNode {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(1.35); opacity: 1; }
+    }
+
+    /* 2. Caja de herramientas: apertura de tapa */
+    .card:hover .icon-toolbox-handle {
+      animation: liftHandle 0.6s ease-in-out infinite alternate;
+      transform-origin: center top;
+    }
+    @keyframes liftHandle {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-3px); }
+    }
+
+    /* 3. Escalones: subida secuencial */
+    .card:hover .icon-step-1 { animation: stepUp 0.6s ease infinite alternate; }
+    .card:hover .icon-step-2 { animation: stepUp 0.6s ease 0.15s infinite alternate; }
+    .card:hover .icon-step-3 { animation: stepUp 0.6s ease 0.3s infinite alternate; }
+    @keyframes stepUp {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-3px); }
+    }
+
+    /* 4. Metacognición: latido cerebral */
+    .card:hover .icon-brain {
+      animation: heartbeat 1s ease-in-out infinite;
+      transform-origin: center;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      30% { transform: scale(1.12); }
+      50% { transform: scale(1.05); }
+      70% { transform: scale(1.14); }
+    }
+
+    /* 5. Semáforo: luces alternando */
+    .card:hover .light-red { animation: lightBlink 1.2s infinite; }
+    .card:hover .light-yellow { animation: lightBlink 1.2s 0.4s infinite; }
+    .card:hover .light-green { animation: lightBlink 1.2s 0.8s infinite; }
+    @keyframes lightBlink {
+      0%, 100% { opacity: 0.25; filter: drop-shadow(0 0 0 transparent); }
+      50% { opacity: 1; filter: drop-shadow(0 0 5px currentColor); }
+    }
+
+    /* 6. Paleta CSI: inclinación suave y manchas saltarinas */
+    .card:hover .icon-palette {
+      animation: tiltPalette 0.8s ease-in-out infinite alternate;
+      transform-origin: center;
+    }
+    @keyframes tiltPalette {
+      0% { transform: rotate(-8deg); }
+      100% { transform: rotate(10deg); }
+    }
+
+    /* 7. Ojo: parpadeo y enfoque */
+    .card:hover .icon-pupil {
+      animation: eyeLook 1.2s ease-in-out infinite;
+      transform-origin: center;
+    }
+    @keyframes eyeLook {
+      0%, 100% { transform: scale(1) translate(0, 0); }
+      25% { transform: scale(1.15) translate(-2px, -1px); }
+      75% { transform: scale(1.15) translate(2px, 1px); }
+    }
+
+    /* 8. Señal de Alto: vibración de freno */
+    .card:hover .icon-stop {
+      animation: stopShake 0.4s ease-in-out infinite;
+      transform-origin: center;
+    }
+    @keyframes stopShake {
+      0%, 100% { transform: translateX(0) rotate(0deg); }
+      25% { transform: translateX(-2px) rotate(-3deg); }
+      75% { transform: translateX(2px) rotate(3deg); }
+    }
+
+    /* 9. Puente: ondulación/arco */
+    .card:hover .icon-bridge-arch {
+      animation: bridgeArch 0.8s ease-in-out infinite alternate;
+      transform-origin: bottom center;
+    }
+    @keyframes bridgeArch {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-2.5px); }
+    }
+
+    /* 10. Detective: lupa buscando huellas */
+    .card:hover .icon-magnifier {
+      animation: searchClues 1s ease-in-out infinite alternate;
+      transform-origin: center;
+    }
+    @keyframes searchClues {
+      0% { transform: translate(-2px, -2px) rotate(-5deg); }
+      100% { transform: translate(3px, 3px) rotate(8deg); }
+    }
+
+    /* 11. Error Fértil: brote que crece */
+    .card:hover .icon-sprout {
+      animation: growSprout 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) infinite alternate;
+      transform-origin: bottom center;
+    }
+    @keyframes growSprout {
+      0% { transform: scale(0.9) rotate(-4deg); }
+      100% { transform: scale(1.15) rotate(4deg); }
+    }
+
+    /* 12. Foco ¿Cómo lo sé?: destello */
+    .card:hover .icon-bulb {
+      animation: bulbGlow 0.8s ease-in-out infinite alternate;
+      transform-origin: center;
+    }
+    @keyframes bulbGlow {
+      0% { filter: drop-shadow(0 0 0px transparent); transform: scale(1); }
+      100% { filter: drop-shadow(0 0 6px rgba(2, 132, 199, 0.6)); transform: scale(1.1); }
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      margin-top: 4.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="badge-hero">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+        Entorno de Aprendizaje Activo
+      </div>
+      <h1>Laboratorio del <span>Pensamiento</span></h1>
+      <p class="subtitle">
+        Explora las 12 rutinas interactivas para guiar tus ideas, estructurar tus razonamientos y enriquecer tu aprendizaje autónomo.
+      </p>
+    </header>
+
+    <!-- CONTROLES -->
+    <div class="controls-wrapper">
+      <div class="search-box">
+        <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscar rutina por nombre o palabra clave..." onkeyup="filterCards()" />
+      </div>
+
+      <div class="filter-tags">
+        <button class="filter-btn active" onclick="filterCategory('all', this)">Todas las Rutinas (12)</button>
+        <button class="filter-btn" onclick="filterCategory('analisis', this)">Análisis e Indagación</button>
+        <button class="filter-btn" onclick="filterCategory('reflexion', this)">Metacognición y Estrategia</button>
+        <button class="filter-btn" onclick="filterCategory('autoevaluacion', this)">Autoevaluación</button>
+      </div>
+    </div>
+
+    <!-- TARJETAS -->
+    <main class="grid" id="routinesGrid">
+
+      <!-- 1 -->
+      <a href="https://anfe-meac.github.io/rutinaconexiones/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="analisis"
+         style="--card-color: #4f46e5; --card-bg-light: #eef2ff; --card-border-light: #c7d2fe;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2">
+                <circle class="icon-node" cx="18" cy="5" r="3"/>
+                <circle class="icon-node" cx="6" cy="12" r="3"/>
+                <circle class="icon-node" cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+            </div>
+            <span class="card-tag">Análisis</span>
+          </div>
+          <h2 class="card-title">Conexiones, Desafíos, Conceptos y Cambios</h2>
+          <p class="card-desc">Conecta saberes previos con nuevas perspectivas, reconoce dificultades y profundiza en conceptos clave.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+      <!-- 2 -->
+      <a href="https://anfe-meac.github.io/micajadeherramientas/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="reflexion"
+         style="--card-color: #0284c7; --card-bg-light: #f0f9ff; --card-border-light: #bae6fd;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                <path class="icon-toolbox-handle" d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+              </svg>
+            </div>
+            <span class="card-tag">Estrategia</span>
+          </div>
+          <h2 class="card-title">Mi Caja de Herramientas Mental</h2>
+          <p class="card-desc">Organiza tus métodos, estrategias y destrezas cognitivas disponibles para superar cualquier desafío.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+      <!-- 3 -->
+      <a href="https://anfe-meac.github.io/escalera-aprendizaje/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="autoevaluacion"
+         style="--card-color: #059669; --card-bg-light: #ecfdf5; --card-border-light: #a7f3d0;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2">
+                <path d="M19 21V3"/>
+                <path class="icon-step-1" d="M5 21v-4h4"/>
+                <path class="icon-step-2" d="M9 17v-4h5"/>
+                <path class="icon-step-3" d="M14 13V9h5"/>
+              </svg>
+            </div>
+            <span class="card-tag">Progreso</span>
+          </div>
+          <h2 class="card-title">La Escalera del Aprendizaje</h2>
+          <p class="card-desc">Recorre paso a paso qué aprendiste, cómo fue el proceso y de qué forma te servirá en tu día a día.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+      <!-- 4 -->
+      <a href="https://anfe-meac.github.io/comolose.r.pensamiento/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="reflexion"
+         style="--card-color: #7c3aed; --card-bg-light: #f5f3ff; --card-border-light: #ddd6fe;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg class="icon-brain" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2">
+                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z"/>
+                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04z"/>
+              </svg>
+            </div>
+            <span class="card-tag">Metacognición</span>
+          </div>
+          <h2 class="card-title">Escalera de la Metacognición</h2>
+          <p class="card-desc">Descubre cómo piensa tu mente, qué dificultades tuviste y cómo mejorar tus estrategias de aprendizaje.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+      <!-- 5 -->
+      <a href="https://anfe-meac.github.io/rutina-pensamiento-semaforo/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="autoevaluacion"
+         style="--card-color: #d97706; --card-bg-light: #fffbeb; --card-border-light: #fde68a;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2">
+                <rect x="6" y="2" width="12" height="20" rx="3"/>
+                <circle class="light-red" cx="12" cy="6.5" r="2.2" fill="#ef4444" stroke="none"/>
+                <circle class="light-yellow" cx="12" cy="12" r="2.2" fill="#f59e0b" stroke="none"/>
+                <circle class="light-green" cx="12" cy="17.5" r="2.2" fill="#10b981" stroke="none"/>
+              </svg>
+            </div>
+            <span class="card-tag">Autoevaluación</span>
+          </div>
+          <h2 class="card-title">Semáforo de mi Aprendizaje</h2>
+          <p class="card-desc">Distingue tus fortalezas, dudas en proceso y áreas que requieren refuerzo mediante una autoevaluación ágil.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+      <!-- 6 -->
+      <a href="https://anfe-meac.github.io/color-simbolo-imagen/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="analisis"
+         style="--card-color: #db2777; --card-bg-light: #fdf2f8; --card-border-light: #fbcfe8;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg class="icon-palette" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2">
+                <path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10c1.38 0 2.5-1.12 2.5-2.5 0-.61-.23-1.2-.64-1.67-.43-.49-.64-.97-.64-1.33 0-.83.67-1.5 1.5-1.5H16c3.31 0 6-2.69 6-6 0-4.96-4.49-9-10-9z"/>
+                <circle cx="7.5" cy="11.5" r="1.5" fill="#db2777"/>
+                <circle cx="12" cy="7.5" r="1.5" fill="#db2777"/>
+                <circle cx="16.5" cy="11.5" r="1.5" fill="#db2777"/>
+              </svg>
+            </div>
+            <span class="card-tag">Creatividad</span>
+          </div>
+          <h2 class="card-title">Color, Símbolo e Imagen (CSI)</h2>
+          <p class="card-desc">Sintetiza la esencia de una lectura o concepto transformándolo en un color, un símbolo y una metáfora visual.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+      <!-- 7 -->
+      <a href="https://anfe-meac.github.io/veo-pienso-mepregunto/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="analisis"
+         style="--card-color: #2563eb; --card-bg-light: #eff6ff; --card-border-light: #bfdbfe;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle class="icon-pupil" cx="12" cy="12" r="3.5" fill="#2563eb"/>
+              </svg>
+            </div>
+            <span class="card-tag">Indagación</span>
+          </div>
+          <h2 class="card-title">Veo - Pienso - Me Pregunto</h2>
+          <p class="card-desc">Observa con atención un estímulo, elabora explicaciones tentativas y formula preguntas para investigar.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+      <!-- 8 -->
+      <a href="https://anfe-meac.github.io/para.ajusta.r.pensamiento/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="reflexion"
+         style="--card-color: #e11d48; --card-bg-light: #fff1f2; --card-border-light: #fecdd3;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg class="icon-stop" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <rect x="8.5" y="8.5" width="7" height="7" rx="1.5" fill="#e11d48"/>
+              </svg>
+            </div>
+            <span class="card-tag">Regulación</span>
+          </div>
+          <h2 class="card-title">Para, Piensa, Comprueba...</h2>
+          <p class="card-desc">Pausa antes de responder impulsivamente, evalúa las evidencias y verifica los resultados paso a paso.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+      <!-- 9 -->
+      <a href="https://anfe-meac.github.io/rutinapuente32-/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="analisis"
+         style="--card-color: #0d9488; --card-bg-light: #f0fdfa; --card-border-light: #99f6e4;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2">
+                <path class="icon-bridge-arch" d="M2 17c3.5-6 6.5-8 10-8s6.5 2 10 8"/>
+                <path d="M2 17h20"/>
+                <line x1="12" y1="9" x2="12" y2="17"/>
+                <line x1="7" y1="12" x2="7" y2="17"/>
+                <line x1="17" y1="12" x2="17" y2="17"/>
+              </svg>
+            </div>
+            <span class="card-tag">Evolución</span>
+          </div>
+          <h2 class="card-title">3 - 2 - 1 Puente</h2>
+          <p class="card-desc">Contrasta tus 3 ideas iniciales, 2 preguntas y 1 analogía con tu visión final para medir el crecimiento de tu pensamiento.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+      <!-- 10 -->
+      <a href="https://anfe-meac.github.io/detectivedemipensamiento/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="reflexion"
+         style="--card-color: #9333ea; --card-bg-light: #faf5ff; --card-border-light: #e9d5ff;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg class="icon-magnifier" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2">
+                <circle cx="11" cy="11" r="7"/>
+                <line x1="21" y1="21" x2="16" y2="16"/>
+                <path d="M11 8v6M8 11h6"/>
+              </svg>
+            </div>
+            <span class="card-tag">Indagación</span>
+          </div>
+          <h2 class="card-title">Detective de mi Pensamiento</h2>
+          <p class="card-desc">Sigue las pistas de tu propio razonamiento: cuestiona suposiciones y descubre las razones de tus conclusiones.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+      <!-- 11 -->
+      <a href="https://anfe-meac.github.io/error-fertil/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="autoevaluacion"
+         style="--card-color: #ea580c; --card-bg-light: #fff7ed; --card-border-light: #fed7aa;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg class="icon-sprout" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2">
+                <path d="M12 22v-9"/>
+                <path d="M12 13a5 5 0 0 1 6-5c0 4-6 5-6 5z" fill="#ea580c" fill-opacity="0.2"/>
+                <path d="M12 13a5 5 0 0 0-6-5c0 4 6 5 6 5z" fill="#ea580c" fill-opacity="0.2"/>
+                <line x1="5" y1="22" x2="19" y2="22"/>
+              </svg>
+            </div>
+            <span class="card-tag">Crecimiento</span>
+          </div>
+          <h2 class="card-title">Análisis del Error Fértil</h2>
+          <p class="card-desc">Desdramatiza el error y conviértelo en tierra fértil: investiga qué falló y obtén aprendizajes valiosos.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+      <!-- 12 -->
+      <a href="https://anfe-meac.github.io/comolose.r.pensamiento/" target="_blank" rel="noopener noreferrer" 
+         class="card" data-category="reflexion"
+         style="--card-color: #0284c7; --card-bg-light: #f0f9ff; --card-border-light: #bae6fd;">
+        <div>
+          <div class="card-top">
+            <div class="card-illustration">
+              <svg class="icon-bulb" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2">
+                <path d="M9 18h6m-4 4h2"/>
+                <path d="M15.09 13.5c.18-.8.65-1.5 1.41-2.2A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1.2.3 2.2 1.5 3.3.76.7 1.23 1.4 1.41 2.2"/>
+              </svg>
+            </div>
+            <span class="card-tag">Justificación</span>
+          </div>
+          <h2 class="card-title">¿Cómo lo sé?</h2>
+          <p class="card-desc">Respalda tus afirmaciones con fuentes confiables, evidencias concretas y un razonamiento sólido y fundamentado.</p>
+        </div>
+        <div class="card-action">
+          Entrar a la rutina
+          <svg fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </a>
+
+    </main>
+
+    <footer>
+      <p><strong>Laboratorio Virtual del Pensamiento</strong> • Herramientas para hacer visible la metacognición</p>
+    </footer>
+  </div>
+
+  <script>
+    function filterCards() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.card');
+
+      cards.forEach(card => {
+        const title = card.querySelector('.card-title').innerText.toLowerCase();
+        const desc = card.querySelector('.card-desc').innerText.toLowerCase();
+        if (title.includes(input) || desc.includes(input)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function filterCategory(category, btnElement) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
